@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import axios from "axios";
-import { BASE_URL } from "@/config"
+import { VITE_BASE_URL } from "@/config"
 import {
     Form,
     FormControl,
@@ -62,7 +62,8 @@ export const SignupForm = () => {
         setLoading(true);
         try {
             // make an api call and submit the form
-            const res = await axios.post(`${BASE_URL}/auth/signup`, values)
+            console.log("VITE_BASE_URL:", VITE_BASE_URL)
+            const res = await axios.post(`${VITE_BASE_URL}/auth/signup`, values)
             console.log(res.data)
             if (res.status === 200) {
                 alert("Account created successfully!");
