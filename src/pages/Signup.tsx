@@ -9,7 +9,7 @@ export const Singup = () => {
         navigate("/dashboard")
     }
     return (
-        <div>
+        <div className="">
             <SignupAuth />
         </div>
     )
