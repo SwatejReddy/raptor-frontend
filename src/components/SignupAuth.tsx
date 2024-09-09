@@ -2,13 +2,13 @@ import { SignupForm } from "./forms/SignupForm"
 
 export const SignupAuth = () => {
     return (
-        <div className="flex justify-center flex-col items-center ">
-            <div className="w-1/4 flex justify-center flex-col">
+        <div className="flex justify-center items-center">
+            <div className="w-full max-w-sm sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4">
                 <div className="text-center mt-5 mb-2">
-                    <div className=" font-bold mb-1 text-3xl">
+                    <div className="font-bold mb-1 text-2xl sm:text-3xl">
                         Create an account
                     </div>
-                    <div className="text-gray-500  ">
+                    <div className="text-gray-500">
                         Already have an account?
                     </div>
                 </div>
@@ -19,6 +19,3 @@ export const SignupAuth = () => {
         </div>
     )
 }
-
-
-// function LabelledInput({label, placeholder, onChange})
