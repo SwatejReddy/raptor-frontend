@@ -62,7 +62,6 @@ export const SignupForm = () => {
         setLoading(true);
         try {
             // make an api call and submit the form
-            console.log("VITE_BASE_URL:", BASE_URL)
             const res = await axios.post(`${BASE_URL}/auth/signup`, values)
             console.log(res.data)
             if (res.status === 200) {
@@ -82,7 +81,7 @@ export const SignupForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                 {/* Name field */}
                 <FormField
                     control={form.control}
@@ -157,16 +156,18 @@ export const SignupForm = () => {
                         </FormItem>
                     )}
                 />
-                {loading ? (<Button disabled={loading} className="w-full flex items-center ">
-                    <ReloadIcon className="mr-2 h-4 animate-spin" />
-                    Please wait
-                </Button>) : (<Button className="w-full" type="submit">Sign up</Button>)}
-                {/* <Button onClick={() => { setLoading(c => !c) }} className="w-full" type="submit">Sign up</Button>
-                <Button disabled={loading} className="w-full flex items-center ">
-                    <ReloadIcon className="mr-2 h-4 animate-spin" />
-                    Please wait
-                </Button> */}
-
+                {
+                    loading ?
+                        (
+                            <Button disabled={loading} className="w-full flex items-center ">
+                                <ReloadIcon className="mr-2 h-4 animate-spin" />
+                                Please wait
+                            </Button>
+                        ) :
+                        (
+                            <Button className="w-full" type="submit">Sign up</Button>
+                        )
+                }
             </form>
         </Form>
     )

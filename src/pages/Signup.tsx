@@ -1,13 +1,17 @@
 import { SignupAuth } from "../components/SignupAuth"
 import { useNavigate } from "react-router-dom"
-import { loggedInAtom } from "@/recoil/atoms/authAtoms"
+import { useEffect } from "react"
 
-export const Singup = () => {
+export const Signup = () => {
     const navigate = useNavigate()
 
-    if (loggedInAtom) {
-        navigate("/dashboard")
-    }
+    useEffect(() => {
+        if (localStorage.getItem("token") !== null) {
+            navigate("/home");
+        }
+    }, []);
+
+
     return (
         <div className="">
             <SignupAuth />
