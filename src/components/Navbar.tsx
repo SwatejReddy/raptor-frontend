@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom"
 import { Search, LogOut, Bell, Settings, Menu, X, Home, User } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -12,18 +13,13 @@ export const Navbar = () => {
         console.log("Logging out...");
         localStorage.clear();
         navigate("/login");
-
-        // // Optionally, you can add a short delay to ensure navigation occurs correctly
-        // setTimeout(() => {
-        //     navigate("/login");
-        // }, 100);
     }
 
 
     return (
         <nav className="relative bg-gray-100 border-b">
             <div className="flex items-center justify-between p-4">
-                <h1 className="text-xl font-bold whitespace-nowrap">Raptor</h1>
+                <Link className="text-xl font-bold whitespace-nowrap" to="/home" >Raptor</Link>
                 <div className="flex-grow mx-4">
                     <div className="relative max-w-md mx-auto flex">
                         <Input

@@ -1,4 +1,5 @@
 import { raptByIdSelector } from "@/recoil/atoms/blogAtoms"
+import { Link } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 
 // interface rapt {
@@ -59,12 +60,12 @@ export const Blog = ({ id }: { id: string }) => {
                 </div>
 
                 <div className="sm:flex sm:items-end sm:justify-end">
-                    <a
-                        href="#"
-                        className="block bg-yellow-300 px-5 py-3 text-center text-xs font-bold uppercase text-gray-900 transition hover:bg-yellow-400"
+                    <Link
+                        to={`/rapt/${rapt?.id}`}
+                        className="block bg-black px-5 py-3 text-center text-xs font-bold uppercase text-white transition hover:bg-black"
                     >
                         Open Rapt
-                    </a>
+                    </Link>
                 </div>
             </div>
         </article>
