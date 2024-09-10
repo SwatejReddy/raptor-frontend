@@ -1,16 +1,16 @@
 import { raptByIdSelector } from "@/recoil/atoms/blogAtoms"
 import { useRecoilValue } from "recoil"
 
-interface rapt {
-    id: string;
-    userId: string;
-    title: string;
-    content: string;
-    likes: number;
-    bookmarks: number;
-    dateCreated: string;
-    dateUpdated: string;
-}
+// interface rapt {
+//     id: string;
+//     userId: string;
+//     title: string;
+//     content: string;
+//     likes: number;
+//     bookmarks: number;
+//     dateCreated: string;
+//     dateUpdated: string;
+// }
 
 export const Blog = ({ id }: { id: string }) => {
     const rapt = useRecoilValue(raptByIdSelector(id))

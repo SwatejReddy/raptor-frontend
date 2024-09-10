@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from "recoil";
+import { atom, selectorFamily } from "recoil";
 
 interface Rapt {
     id: string;
