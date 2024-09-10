@@ -52,7 +52,8 @@ export const LoginForm = () => {
         try {
             const res = await axios.post(`${BASE_URL}/auth/login`, values);
             if (res.status === 200) {
-                localStorage.setItem("token", res.data);
+                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("id", res.data.userId);
                 navigate("/home");
             } else if (res.status === 401) {
                 alert("Invalid credentials");

@@ -20,7 +20,7 @@ export const Home = () => {
                     <LatestBlogs />
                 </div>
                 <div className="col-span-1 bg-gray-100 p-4">
-                    <Blog />
+                    <Blog key={2} id={"4"} />
                 </div>
             </div>
         </>
