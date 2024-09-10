@@ -39,10 +39,6 @@ export const LatestBlogs = () => {
 
     return (
         <div className="">
-            {/* {latestRapts.map((rapt) => {
-                <Blog key={rapt.id} id={rapt.id} 
-            })}
-             */}
             {
                 latestRapts.map((rapt) => {
                     return <Blog key={rapt.id} id={rapt.id} />;
