@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { BASE_URL } from "@/config"
 import axios from "axios"
 import { useRecoilState } from "recoil";
 import { raptsAtom } from "@/recoil/atoms/blogAtoms";
 import { Blog } from "@/components/Blog";
+import { Loader } from "./Animations/Loader";
 
 // interface rapt {
 //     id: string;
@@ -18,6 +19,7 @@ import { Blog } from "@/components/Blog";
 
 export const LatestBlogs = () => {
     const [latestRapts, setLatestRapts] = useRecoilState(raptsAtom);
+    const [isLoading, setIsLoading] = useState(true);
     // const getRaptById = useRecoilValue(raptByIdSelector);
 
     useEffect(() => {
@@ -32,12 +34,18 @@ export const LatestBlogs = () => {
             const data = res.data.rapts;
             console.log(data);
             setLatestRapts(data);
+            setIsLoading(false);
         }
 
         fetchLatestBlogs();
     }, [setLatestRapts]);
 
+    if (isLoading) return <div>
+        <Loader />
+    </div>
+
     return (
+
         <div className="">
             {
                 latestRapts.map((rapt) => {

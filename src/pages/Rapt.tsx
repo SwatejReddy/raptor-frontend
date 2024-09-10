@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { Navbar } from '@/components/Navbar';
+import { Loader } from '@/components/Animations/Loader';
 
 
 interface Rapt {
@@ -53,7 +54,9 @@ export const Rapt: React.FC = () => {
         fetchRapt();
     }, [id]);
 
-    if (loading) return <><Navbar /><div>Loading...</div></>;
+    if (loading) return <><Navbar /><div>
+        <Loader />
+    </div></>;
     if (error) return <><Navbar /><div>Error: {error}</div></>;
     if (!rapt) return <><Navbar /><div>Rapt not found</div></>;
 
