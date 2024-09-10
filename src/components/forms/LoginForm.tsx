@@ -89,7 +89,7 @@ export const LoginForm = () => {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder="Name" {...field} autoComplete="off" />
+                                <Input type="password" placeholder="Name" {...field} autoComplete="off" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
