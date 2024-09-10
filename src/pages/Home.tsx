@@ -1,4 +1,3 @@
-import { Blog } from "@/components/Blog";
 import { LatestBlogs } from "@/components/LatestBlogs";
 import { Navbar } from "@/components/Navbar";
 import { useEffect } from "react";
