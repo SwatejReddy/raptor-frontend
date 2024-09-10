@@ -35,6 +35,9 @@ export const Navbar = () => {
 
                 <div className="hidden md:flex items-center space-x-2">
                     <Button variant="ghost" size="icon">
+                        <Home size={20} onClick={() => { navigate("/home") }} />
+                    </Button>
+                    <Button variant="ghost" size="icon">
                         <Bell size={20} />
                     </Button>
                     <Button variant="ghost" size="icon">
@@ -55,7 +58,7 @@ export const Navbar = () => {
             {isMenuOpen && (
                 <div className="z-10 absolute top-full left-0 right-0 bg-gray-100 shadow-md md:hidden">
                     <div className="p-4 space-y-2">
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button variant="ghost" onClick={() => { navigate("/home") }} className="w-full justify-start">
                             <Home className="mr-2 h-4 w-4" /> Home
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
