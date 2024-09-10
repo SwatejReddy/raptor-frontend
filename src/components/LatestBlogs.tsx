@@ -1,19 +1,20 @@
 import { useEffect } from "react"
 import { BASE_URL } from "@/config"
 import axios from "axios"
-import { useRecoilState, useRecoilValue } from "recoil";
-import { raptByIdSelector, raptsAtom } from "@/recoil/atoms/blogAtoms";
+import { useRecoilState } from "recoil";
+import { raptsAtom } from "@/recoil/atoms/blogAtoms";
 import { Blog } from "@/components/Blog";
-interface rapt {
-    id: string;
-    userId: string;
-    title: string;
-    content: string;
-    likes: number;
-    bookmarks: number;
-    dateCreated: string;
-    dateUpdated: string;
-}
+
+// interface rapt {
+//     id: string;
+//     userId: string;
+//     title: string;
+//     content: string;
+//     likes: number;
+//     bookmarks: number;
+//     dateCreated: string;
+//     dateUpdated: string;
+// }
 
 export const LatestBlogs = () => {
     const [latestRapts, setLatestRapts] = useRecoilState(raptsAtom);
