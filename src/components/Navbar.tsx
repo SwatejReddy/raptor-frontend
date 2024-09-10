@@ -7,12 +7,25 @@ import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
 
     async function manageLogOut() {
         console.log("Logging out...");
         localStorage.clear();
         navigate("/login");
+    }
+
+    function handleRaptSearch() {
+        if (searchQuery.trim()) {
+            navigate(`/search?query=${searchQuery}`);
+        }
+    }
+
+    const handleKeyPress = (e: { key: string; }) => {
+        if (e.key == 'Enter') {
+            handleRaptSearch();
+        }
     }
 
 
@@ -26,8 +39,11 @@ export const Navbar = () => {
                             type="search"
                             placeholder="Search..."
                             className="pr-4 py-2 w-full rounded-r-none"
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={handleKeyPress}
+                            value={searchQuery}
                         />
-                        <Button className="rounded-l-none" variant="secondary">
+                        <Button onClick={handleRaptSearch} className="rounded-l-none" variant="secondary">
                             <Search size={18} />
                         </Button>
                     </div>

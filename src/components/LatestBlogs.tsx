@@ -6,17 +6,6 @@ import { raptsAtom } from "@/recoil/atoms/blogAtoms";
 import { Blog } from "@/components/Blog";
 import { Loader } from "./Animations/Loader";
 
-// interface rapt {
-//     id: string;
-//     userId: string;
-//     title: string;
-//     content: string;
-//     likes: number;
-//     bookmarks: number;
-//     dateCreated: string;
-//     dateUpdated: string;
-// }
-
 export const LatestBlogs = () => {
     const [latestRapts, setLatestRapts] = useRecoilState(raptsAtom);
     const [isLoading, setIsLoading] = useState(true);

@@ -5,6 +5,7 @@ import { Home } from "./pages/Home"
 import { Index } from "./pages/Index"
 import { Rapt } from "./pages/Rapt"
 import { CreateRapt } from "./pages/CreateRapt"
+import { SearchedRapts } from "./components/SearchedRapts"
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/rapt/:id" element={<Rapt />} />
           <Route path="/new-rapt" element={<CreateRapt />} />
+          <Route path="/search" element={<SearchedRapts />} />
         </Routes>
       </BrowserRouter>
     </>
