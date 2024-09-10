@@ -2,17 +2,6 @@ import { raptByIdSelector } from "@/recoil/atoms/blogAtoms"
 import { Link } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 
-// interface rapt {
-//     id: string;
-//     userId: string;
-//     title: string;
-//     content: string;
-//     likes: number;
-//     bookmarks: number;
-//     dateCreated: string;
-//     dateUpdated: string;
-// }
-
 export const Blog = ({ id }: { id: string }) => {
     const rapt = useRecoilValue(raptByIdSelector(id))
     if (!rapt) {
@@ -53,6 +42,13 @@ export const Blog = ({ id }: { id: string }) => {
                             {rapt?.title}
                         </h3>
                     </a>
+
+                    <div className='mt-2 flex items-center'>
+                        <div className="relative w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                            <svg className="absolute w-7 h-7 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <p className="ml-3 text-xs text-muted-foreground">{rapt.user.name}</p>
+                    </div>
 
                     <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">
                         {displayContent}

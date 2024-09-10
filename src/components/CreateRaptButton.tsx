@@ -7,7 +7,7 @@ export const CreateRaptButton = () => {
     const navigate = useNavigate();
 
     const handleCreateRapt = () => {
-        navigate('/create-Rapt');
+        navigate('/new-rapt');
     };
 
     return (
