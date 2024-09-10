@@ -57,7 +57,7 @@ export const Navbar = () => {
             </div>
 
             {isMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-gray-100 shadow-md md:hidden">
+                <div className="z-10 absolute top-full left-0 right-0 bg-gray-100 shadow-md md:hidden">
                     <div className="p-4 space-y-2">
                         <Button variant="ghost" className="w-full justify-start">
                             <Home className="mr-2 h-4 w-4" /> Home

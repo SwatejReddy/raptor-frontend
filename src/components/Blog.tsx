@@ -25,7 +25,7 @@ export const Blog = ({ id }: { id: string }) => {
 
     return (
         <article className="flex bg-white transition hover:shadow-xl mb-5">
-            <div className="rotate-180 p-2 [writing-mode:_vertical-lr]">
+            <div className="sm:z-0 rotate-180 p-2 [writing-mode:_vertical-lr]">
                 <time
                     dateTime="2022-10-10"
                     className="flex items-center justify-between gap-4 text-xs font-bold uppercase text-gray-900"
