@@ -21,8 +21,8 @@ export const Navbar = () => {
 
 
     return (
-        <nav className="relative bg-gray-100">
-            <div className="flex items-center justify-between p-3">
+        <nav className="relative bg-gray-100 border-b">
+            <div className="flex items-center justify-between p-4">
                 <h1 className="text-xl font-bold whitespace-nowrap">Raptor</h1>
                 <div className="flex-grow mx-4">
                     <div className="relative max-w-md mx-auto flex">
