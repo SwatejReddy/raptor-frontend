@@ -10,6 +10,11 @@ export const CreateRapt = () => {
     const navigate = useNavigate();
 
     async function submitRapt() {
+        if (title.trim() === '' || content.trim() === '') {
+            alert('Title and content cannot be empty');
+            return;
+        }
+
         try {
             const res = await axios.post(`${BASE_URL}/rapt/create`, {
                 title,
