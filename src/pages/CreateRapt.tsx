@@ -4,16 +4,27 @@ import axios from "axios"
 import { BASE_URL } from "@/config"
 import { useNavigate } from "react-router-dom"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 export const CreateRapt = () => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
 
     async function submitRapt() {
         if (title.trim() === '' || content.trim() === '') {
-            alert('Title and content cannot be empty');
+            // set showAlert to true to show the alert box
+            setShowAlert(true);
             return;
         }
 
@@ -64,6 +75,21 @@ export const CreateRapt = () => {
                         )
                 }
             </div>
+            <AlertDialog open={showAlert}>
+                <AlertDialogContent className="flex flex-col items-center justify-center max-w-[300px] p-4">
+                    <AlertDialogHeader className="text-center">
+                        <AlertDialogTitle className="text-lg font-semibold mb-2">Invalid Input</AlertDialogTitle>
+                        <AlertDialogDescription className="text-sm text-muted-foreground">
+                            Title or Content cannot be empty.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="flex justify-center mt-4">
+                        <AlertDialogAction onClick={() => setShowAlert(false)}>
+                            Okay
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }
