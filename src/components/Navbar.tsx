@@ -50,8 +50,8 @@ export const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex items-center space-x-2">
-                    <Button variant="ghost" size="icon">
-                        <Home size={20} onClick={() => { navigate("/home") }} />
+                    <Button variant="ghost" size="icon" onClick={() => { navigate("/home") }} >
+                        <Home size={20} />
                     </Button>
                     <Button variant="ghost" size="icon">
                         <Bell size={20} />
@@ -59,7 +59,7 @@ export const Navbar = () => {
                     <Button variant="ghost" size="icon">
                         <Settings size={20} />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => { navigate(`/profile/${localStorage.getItem("id")}`) }} >
                         <User size={20} />
                     </Button>
                     <Button variant="outline" onClick={manageLogOut} >
@@ -77,7 +77,7 @@ export const Navbar = () => {
                         <Button variant="ghost" onClick={() => { navigate("/home") }} className="w-full justify-start">
                             <Home className="mr-2 h-4 w-4" /> Home
                         </Button>
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button variant="ghost" className="w-full justify-start" onClick={() => { navigate(`/profile/${localStorage.getItem("id")}`) }}>
                             <User className="mr-2 h-4 w-4" /> Profile
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">

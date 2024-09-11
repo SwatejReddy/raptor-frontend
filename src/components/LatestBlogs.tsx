@@ -27,7 +27,7 @@ export const LatestBlogs = () => {
         }
 
         fetchLatestBlogs();
-    }, [setLatestRapts]);
+    }, [latestRapts]);
 
     if (isLoading) return <div>
         <Loader />

@@ -32,9 +32,6 @@ export const SearchedRapts = () => {
         getSearchResults();
     }, [query])
 
-
-
-
     return (
         <>
             <Navbar />

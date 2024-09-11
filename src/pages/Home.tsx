@@ -21,9 +21,9 @@ export const Home = () => {
                     <CreateRaptButton />
                     <LatestBlogs />
                 </div>
-                <div className="hidden md:block col-span-1 bg-gray-50">
+                {/* <div className="hidden md:block col-span-1 bg-gray-50">
                     Top Picks of the week goes here!
-                </div>
+                </div> */}
             </div>
         </>
     );
