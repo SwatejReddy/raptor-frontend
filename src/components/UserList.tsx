@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 // type UserListProps = {
@@ -35,18 +35,11 @@ interface UserListProps {
     following: followingDetails[];
 }
 
-type User = {
-    id: number
-    name: string
-    username: string
-    avatar: string
-    isFollowing: boolean
-}
 
 export default function UserList({ type, followers, following }: UserListProps) {
-    const [followersList, setFollowersList] = useState<followerDetails[]>(type === "followers" ? followers : []);
+    const followersList = useMemo(() => (type === "followers" ? followers : []), [type, followers]);
+    const followingList = useMemo(() => (type === "following" ? following : []), [type, following]);
 
-    const [followingList, setFollowingList] = useState<followingDetails[]>(type === "following" ? following : []);
 
     // const toggleFollow = (userId: number) => {
     //     setUsers(users.map(user =>
