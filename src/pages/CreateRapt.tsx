@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button"
 import axios from "axios"
 import { BASE_URL } from "@/config"
 import { useNavigate } from "react-router-dom"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 export const CreateRapt = () => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     async function submitRapt() {
@@ -16,6 +18,7 @@ export const CreateRapt = () => {
         }
 
         try {
+            setLoading(true);
             const res = await axios.post(`${BASE_URL}/rapt/create`, {
                 title,
                 content
@@ -29,6 +32,7 @@ export const CreateRapt = () => {
         } catch (e) {
             console.log(e);
         } finally {
+            setLoading(false);
             navigate('/home');
         }
 
@@ -47,7 +51,18 @@ export const CreateRapt = () => {
                 <textarea onChange={(e) => { setContent(e.target.value) }} className="w-full min-h-96 text-base leading-relaxed outline-none placeholder-gray-500" placeholder="Start writing your content here..."></textarea>
             </div>
             <div className="content-start w-3/4">
-                <Button onClick={submitRapt} variant="default">Post</Button>
+                {
+                    loading ?
+                        (
+                            <Button disabled>
+                                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                                Posting
+                            </Button>
+                        ) :
+                        (
+                            <Button onClick={submitRapt} variant="default">Post</Button>
+                        )
+                }
             </div>
         </div>
     )
