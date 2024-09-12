@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, LogOut, Bell, Settings, Menu, X, Home, User } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get('query');
+        if (query) {
+            setSearchQuery(query);
+        }
+    }, [location]);
 
     async function manageLogOut() {
         console.log("Logging out...");
@@ -18,21 +26,20 @@ export const Navbar = () => {
 
     function handleRaptSearch() {
         if (searchQuery.trim()) {
-            navigate(`/search?query=${searchQuery}`);
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
         }
     }
 
-    const handleKeyPress = (e: { key: string; }) => {
-        if (e.key == 'Enter') {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
             handleRaptSearch();
         }
     }
 
-
     return (
         <nav className="relative bg-gray-100 border-b">
             <div className="flex items-center justify-between p-4">
-                <Link className="text-xl font-bold whitespace-nowrap" to="/home" >Raptor</Link>
+                <Link className="text-xl font-bold whitespace-nowrap" to="/home">Raptor</Link>
                 <div className="flex-grow mx-4">
                     <div className="relative max-w-md mx-auto flex">
                         <Input
@@ -50,7 +57,7 @@ export const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex items-center space-x-2">
-                    <Button variant="ghost" size="icon" onClick={() => { navigate("/home") }} >
+                    <Button variant="ghost" size="icon" onClick={() => { navigate("/home") }}>
                         <Home size={20} />
                     </Button>
                     <Button variant="ghost" size="icon">
@@ -59,10 +66,10 @@ export const Navbar = () => {
                     <Button variant="ghost" size="icon">
                         <Settings size={20} />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => { navigate(`/profile/${localStorage.getItem("id")}`) }} >
+                    <Button variant="ghost" size="icon" onClick={() => { navigate(`/profile/${localStorage.getItem("id")}`) }}>
                         <User size={20} />
                     </Button>
-                    <Button variant="outline" onClick={manageLogOut} >
+                    <Button variant="outline" onClick={manageLogOut}>
                         <LogOut className="mr-2 h-4 w-4" /> Logout
                     </Button>
                 </div>
@@ -94,4 +101,4 @@ export const Navbar = () => {
             )}
         </nav>
     );
-};
+}
