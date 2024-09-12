@@ -1,9 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Card, CardContent } from "./ui/card"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog"
 import { Button } from "./ui/button"
-import { DialogHeader } from "./ui/dialog"
-import UserList from "./UserList"
 import { UserPlus } from "lucide-react"
 // import { UserMinus } from "lucide-react"
 
