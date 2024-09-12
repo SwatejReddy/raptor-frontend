@@ -8,6 +8,8 @@ import { Blog } from "./Blog";
 import { useRecoilState } from "recoil";
 import { searchedRaptsAtom, searchedRaptsByIdSelector } from "@/recoil/atoms/blogAtoms";
 
+
+
 export const SearchedRapts = () => {
     const [searchParams] = useSearchParams();
     // const [searchResults, setSearchResults] = useState<rapt[]>([]);
@@ -39,13 +41,18 @@ export const SearchedRapts = () => {
     return (
         <>
             <Navbar />
-            <div className="">
-                {
-                    searchResults.map((rapt) => {
-                        return <Blog key={rapt.id} id={rapt.id} raptSelector={searchedRaptsByIdSelector} />;
-                    })
-                }
-            </div>
+            <main className="container mx-auto px-4 py-8">
+                <h1 className="text-3xl font-bold mb-6 text-gray-800">
+                    Search Results for "{query}"
+                </h1>
+                <div className="">
+                    {
+                        searchResults.map((rapt) => {
+                            return <Blog key={rapt.id} id={rapt.id} raptSelector={searchedRaptsByIdSelector} />;
+                        })
+                    }
+                </div>
+            </main>
         </>
     )
 }
