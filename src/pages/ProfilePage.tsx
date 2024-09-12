@@ -8,10 +8,13 @@ import UserList from '@/components/UserList'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '@/config'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { userLatestRaptsAtom, userLatestRaptsByIdSelector, userLikedRaptsAtom, userLikedRaptsByIdSelector } from '@/recoil/atoms/blogAtoms'
 import { Navbar } from '@/components/Navbar'
 import { ProfileCard } from '@/components/ProfileCard'
+import { isCurrentUserAtom } from '@/recoil/atoms/userAtoms'
+import { triggerProfileDataFetchAtom } from '@/recoil/atoms/triggerAtoms'
+import { profileLoadingAtom } from '@/recoil/atoms/loadingAtoms'
 
 interface userDetails {
     id: string,
@@ -58,6 +61,12 @@ export const ProfilePage = () => {
 
     const [latestRapts, setLatestRapts] = useRecoilState(userLatestRaptsAtom);
     const [likedRapts, setLikedRapts] = useRecoilState(userLikedRaptsAtom);
+    const setIsCurrentUser = useSetRecoilState(isCurrentUserAtom)
+    // const [isCurrentUser, setIsCurrentUser] = useState(false);
+    // const [isFollowing, setIsFollowing] = useState(false);
+    const [triggerProfileDataFetch] = useRecoilState(triggerProfileDataFetchAtom);
+
+    const setProfileLoading = useSetRecoilState(profileLoadingAtom);
 
     const requestedProfileId = useParams<{ id: string }>()
 
@@ -73,10 +82,12 @@ export const ProfilePage = () => {
                     "Authorization": localStorage.getItem("token")
                 }
             })
-            console.log(res.data);
+            console.log('isCurrent user profile:', res.data.isCurrentUserProfile);
+            setIsCurrentUser(res.data.isCurrentUserProfile);
         }
 
         async function getProfileData() {
+            setProfileLoading(true);
             var userData = await axios.get(`${BASE_URL}/user/profile/${requestedProfileId.id}`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -96,6 +107,7 @@ export const ProfilePage = () => {
 
             setFollowers(followersFollowingData.data.followers);
             setFollowing(followersFollowingData.data.following);
+            setProfileLoading(false);
         }
 
         async function getLatestRapts() {
@@ -125,7 +137,7 @@ export const ProfilePage = () => {
         getProfileData();
         getLatestRapts();
         getLikedRapts();
-    }, [requestedProfileId])
+    }, [requestedProfileId, triggerProfileDataFetch])
 
     useEffect(() => {
         console.log({ followers, following })

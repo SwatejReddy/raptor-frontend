@@ -1,5 +1,5 @@
 import { rapt } from "@/types/rapt";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { RecoilValue, useRecoilValue } from "recoil"
 
 interface BlogProps {
@@ -8,7 +8,11 @@ interface BlogProps {
 }
 
 export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
+
     const rapt = useRecoilValue(raptSelector(id))
+
+    const navigate = useNavigate()
+
     if (!rapt) {
         return <div>Rapt Loading...</div>
     }
@@ -43,16 +47,15 @@ export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
                 <div className="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
                     <a href="#">
                         <h3 className="font-bold uppercase text-gray-900">
-                            {/* Finding the right guitar for your style - 5 tips */}
                             {rapt?.title}
                         </h3>
                     </a>
 
                     <div className='mt-2 flex items-center'>
-                        <div className="relative w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                        <div onClick={() => { navigate(`/profile/${rapt.userId}`) }} className="relative w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 cursor-pointer">
                             <svg className="absolute w-7 h-7 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                         </div>
-                        <p className="ml-3 text-xs text-muted-foreground">{rapt.user.name}</p>
+                        <p onClick={() => { navigate(`/profile/${rapt.userId}`) }} className="ml-3 text-xs text-muted-foreground cursor-pointer">{rapt.user.name}</p>
                     </div>
 
                     <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">

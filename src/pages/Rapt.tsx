@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { Navbar } from '@/components/Navbar';
@@ -35,6 +35,7 @@ export const Rapt: React.FC = () => {
     const [rapt, setRapt] = useState<Rapt | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchRapt = async () => {
@@ -67,11 +68,11 @@ export const Rapt: React.FC = () => {
                 <div className='mb-5'>
                     <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">{rapt.title}</h1>
                 </div>
-                <div className='mb-5 flex items-center'>
+                <div onClick={() => { navigate(`/profile/${rapt.userId}`) }} className='mb-5 flex items-center cursor-pointer'>
                     <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                         <svg className="absolute w-8 h-8 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                     </div>
-                    <p className="text-sm text-muted-foreground ml-3">{rapt.user.name}</p>
+                    <p className="text-sm text-muted-foreground ml-3" >{rapt.user.name}</p>
                 </div>
                 <div>
                     <p className="leading-7 [&:not(:first-child)]:mt-6">{rapt.content}</p>
