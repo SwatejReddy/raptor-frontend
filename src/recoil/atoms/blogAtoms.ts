@@ -54,3 +54,16 @@ export const userLikedRaptsByIdSelector = selectorFamily<Rapt | undefined, strin
         return rapts.find(rapt => rapt.id === id);
     }
 });
+
+export const searchedRaptsAtom = atom<Rapt[]>({
+    key: "searchedRaptsAtom",
+    default: []
+});
+
+export const searchedRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+    key: "searchedRaptsByIdSelector",
+    get: (id: string) => ({ get }) => {
+        const rapts = get(searchedRaptsAtom);
+        return rapts.find(rapt => rapt.id === id);
+    }
+});
