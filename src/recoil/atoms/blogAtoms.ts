@@ -16,15 +16,41 @@ interface Rapt {
     }
 }
 
-export const raptsAtom = atom<Rapt[]>({
-    key: "raptsAtom",
+export const latestRaptsAtom = atom<Rapt[]>({
+    key: "latestRaptsAtom",
     default: []
 });
 
-export const raptByIdSelector = selectorFamily<Rapt | undefined, string>({
-    key: "raptByIdSelector",
+export const latestRaptByIdSelector = selectorFamily<Rapt | undefined, string>({
+    key: "latestRaptByIdSelector",
     get: (id: string) => ({ get }) => {
-        const rapts = get(raptsAtom);
+        const rapts = get(latestRaptsAtom);
+        return rapts.find(rapt => rapt.id === id);
+    }
+});
+
+export const userLatestRaptsAtom = atom<Rapt[]>({
+    key: "userLatestRaptsAtom",
+    default: []
+});
+
+export const userLatestRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+    key: "userLatestRaptsByIdSelector",
+    get: (id: string) => ({ get }) => {
+        const rapts = get(userLatestRaptsAtom);
+        return rapts.find(rapt => rapt.id === id);
+    }
+});
+
+export const userLikedRaptsAtom = atom<Rapt[]>({
+    key: "userLikedRaptsAtom",
+    default: []
+});
+
+export const userLikedRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+    key: "userLikedRaptsByIdSelector",
+    get: (id: string) => ({ get }) => {
+        const rapts = get(userLikedRaptsAtom);
         return rapts.find(rapt => rapt.id === id);
     }
 });

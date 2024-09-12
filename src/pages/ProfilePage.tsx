@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '@/config'
 import { useRecoilState } from 'recoil'
-import { raptsAtom } from '@/recoil/atoms/blogAtoms'
+import { userLatestRaptsAtom, userLatestRaptsByIdSelector, userLikedRaptsAtom, userLikedRaptsByIdSelector } from '@/recoil/atoms/blogAtoms'
 import { Navbar } from '@/components/Navbar'
 
 interface userDetails {
@@ -54,7 +54,7 @@ export const ProfilePage = () => {
     const [isFollowersOpen, setIsFollowersOpen] = useState(false)
     const [isFollowingOpen, setIsFollowingOpen] = useState(false)
     // to switch between latest and liked rapts
-    const [raptSection, setRaptSection] = useState("latest")
+    // const [raptSection, setRaptSection] = useState("latest")
 
     // to enable edit view if the profile opened is of the current user
     // const [isCurrentUserProfile, setIsCurrentUserProfile] = useState(false);
@@ -70,7 +70,8 @@ export const ProfilePage = () => {
 
     // rapts of this user are stored here:
     // const [rapts, setRapts] = useState<rapt[]>([])
-    const [rapts, setRapts] = useRecoilState(raptsAtom);
+    const [latestRapts, setLatestRapts] = useRecoilState(userLatestRaptsAtom);
+    const [likedRapts, setLikedRapts] = useRecoilState(userLikedRaptsAtom);
 
     // extract the profile id from the url
     const requestedProfileId = useParams<{ id: string }>()
@@ -121,44 +122,49 @@ export const ProfilePage = () => {
         }
 
         // fetch all latest rapts of the profile being visited
-        async function getUserRapts() {
+        async function getLatestRapts() {
             var res;
-            if (raptSection === "latest") {
-                res = await axios.get(`${BASE_URL}/rapt/${requestedProfileId.id}/all`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token")
-                    }
-                });
-                setRapts(res.data.rapts);
-            } else {
-                res = await axios.get(`${BASE_URL}/rapt/liked/${requestedProfileId.id}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token")
-                    }
-                });
-                setRapts(res.data.likedRapts)
-            }
+            // if (raptSection === "latest") {
+            res = await axios.get(`${BASE_URL}/rapt/${requestedProfileId.id}/all`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            });
+            setLatestRapts(res.data.rapts);
+
+        }
+
+        async function getLikedRapts() {
+            // } else {
+            var res = await axios.get(`${BASE_URL}/rapt/liked/${requestedProfileId.id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            });
+            setLikedRapts(res.data.likedRapts)
+            // }
             console.log(res.data.rapts);
         }
 
         checkIfCurrentUserProfile();
         getProfileData();
-        getUserRapts();
-    }, [requestedProfileId, raptSection])
+        getLatestRapts();
+        getLikedRapts();
+    }, [requestedProfileId])
 
     useEffect(() => {
         console.log({ followers, following })
     }, [followers, following])
 
-    function switchToLatestRapts() {
-        setRaptSection("latest");
-    }
+    // function switchToLatestRapts() {
+    //     setRaptSection("latest");
+    // }
 
-    function switchToLikedRapts() {
-        setRaptSection("liked");
-    }
+    // function switchToLikedRapts() {
+    //     setRaptSection("liked");
+    // }
 
     const user = {
         name: "Jane Doe",
@@ -241,20 +247,20 @@ export const ProfilePage = () => {
                     <div className="lg:w-2/3">
                         <Tabs defaultValue="latest" className="w-full">
                             <TabsList className="mb-5 grid w-full grid-cols-2">
-                                <TabsTrigger onClick={switchToLatestRapts} value="latest">Latest Rapts</TabsTrigger>
-                                <TabsTrigger onClick={switchToLikedRapts} value="liked">Liked Rapts</TabsTrigger>
+                                <TabsTrigger value="latest">Latest Rapts</TabsTrigger>
+                                <TabsTrigger value="liked">Liked Rapts</TabsTrigger>
                             </TabsList>
                             <TabsContent value="latest" className="h-[calc(100vh-160px)] overflow-y-auto scrollbar-hide ">
                                 <div className="">
-                                    {rapts.map((rapt) => (
-                                        <Blog key={rapt.id} id={rapt.id} />
+                                    {latestRapts.map((rapt) => (
+                                        <Blog key={rapt.id} id={rapt.id} raptSelector={userLatestRaptsByIdSelector} />
                                     ))}
                                 </div>
                             </TabsContent>
                             <TabsContent value="liked" className="h-[calc(100vh-160px)] overflow-y-auto scrollbar-hide">
                                 <div className="">
-                                    {rapts.map((rapt) => (
-                                        <Blog key={rapt.id} id={rapt.id} />
+                                    {likedRapts.map((rapt) => (
+                                        <Blog key={rapt.id} id={rapt.id} raptSelector={userLikedRaptsByIdSelector} />
                                     ))}
                                 </div>
                             </TabsContent>

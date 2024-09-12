@@ -7,4 +7,9 @@ export interface rapt {
     bookmarks: number;
     dateCreated: string;
     dateUpdated: string;
+    user: {
+        name: string;
+        username: string;
+        id: string;
+    }
 }
