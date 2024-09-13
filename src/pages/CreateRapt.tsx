@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/alert-dialog"
 import MDEditor from '@uiw/react-md-editor';
 import { Navbar } from "@/components/Navbar"
+import {
+    commands,
+} from "@uiw/react-md-editor";
 
 export const CreateRapt = () => {
     const [title, setTitle] = useState('')
@@ -55,6 +58,7 @@ export const CreateRapt = () => {
 
     }
 
+
     return (
         <>
             <Navbar />
@@ -67,13 +71,47 @@ export const CreateRapt = () => {
                         placeholder="Enter your title here"
                     />
                 </div>
-                <div className="w-3/4 mb-5">
-                    {/* <textarea onChange={(e) => { setContent(e.target.value) }} className="w-full min-h-96 text-base leading-relaxed outline-none placeholder-gray-500" placeholder="Start writing your content here..."></textarea> */}
+                <div className="w-3/4 mb-5 overflow-hidden " data-color-mode="light">
                     <MDEditor
                         value={content}
-                        onChange={(value) => setContent(value || '')} // Handle optional value parameter
-                        className="w-full min-h-96 text-base leading-relaxed outline-none"
-                        preview="edit" // Enables WYSIWYG behavior
+                        onChange={(val) => {
+                            setContent(val!);
+                        }}
+                        commands={[
+                            commands.bold,
+                            commands.italic,
+                            commands.codeBlock,
+                            commands.quote,
+                            commands.unorderedListCommand,
+                            commands.orderedListCommand,
+                            commands.group(
+                                [
+                                    commands.title1,
+                                    commands.title2,
+                                    commands.title3,
+                                    commands.title4,
+                                    commands.title5,
+                                    commands.title6
+                                ],
+                                {
+                                    name: "title",
+                                    groupName: "title",
+                                    buttonProps: { "aria-label": "Insert title" }
+                                }
+                            ),
+                        ]}
+                        height={400}
+                        enableScroll={false}
+                        previewOptions={{
+                            className: "bg-background text-foreground"
+                        }}
+                        style={{
+                            border: 'none',
+                            boxShadow: 'none',
+                            background: 'transparent',
+                            overflow: 'hidden'
+                        }}
+                        visibleDragbar={false}
                     />
                 </div>
 
