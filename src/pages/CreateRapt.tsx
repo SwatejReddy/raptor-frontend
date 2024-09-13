@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import axios from "axios"
 import { BASE_URL } from "@/config"
@@ -13,6 +13,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import MDEditor from '@uiw/react-md-editor';
 import { Navbar } from "@/components/Navbar"
 
 export const CreateRapt = () => {
@@ -21,6 +22,10 @@ export const CreateRapt = () => {
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(content);
+    }, [content])
 
     async function submitRapt() {
         if (title.trim() === '' || content.trim() === '') {
@@ -63,8 +68,15 @@ export const CreateRapt = () => {
                     />
                 </div>
                 <div className="w-3/4 mb-5">
-                    <textarea onChange={(e) => { setContent(e.target.value) }} className="w-full min-h-96 text-base leading-relaxed outline-none placeholder-gray-500" placeholder="Start writing your content here..."></textarea>
+                    {/* <textarea onChange={(e) => { setContent(e.target.value) }} className="w-full min-h-96 text-base leading-relaxed outline-none placeholder-gray-500" placeholder="Start writing your content here..."></textarea> */}
+                    <MDEditor
+                        value={content}
+                        onChange={(value) => setContent(value || '')} // Handle optional value parameter
+                        className="w-full min-h-96 text-base leading-relaxed outline-none"
+                        preview="edit" // Enables WYSIWYG behavior
+                    />
                 </div>
+
                 <div className="content-start w-3/4">
                     {
                         loading ?

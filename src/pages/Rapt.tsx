@@ -4,7 +4,7 @@ import { BASE_URL } from "@/config";
 import axios from "axios";
 import { Navbar } from '@/components/Navbar';
 import { Loader } from '@/components/Animations/Loader';
-
+import Markdown from 'react-markdown';
 
 interface Rapt {
     id: number;
@@ -75,7 +75,8 @@ export const Rapt: React.FC = () => {
                     <p className="text-sm text-muted-foreground ml-3" >{rapt.user.name}</p>
                 </div>
                 <div>
-                    <p className="leading-7 [&:not(:first-child)]:mt-6">{rapt.content}</p>
+                    {/* <p className="leading-7 [&:not(:first-child)]:mt-6">{rapt.content}</p> */}
+                    <Markdown className="prose lg:prose-xl">{rapt.content}</Markdown>
                 </div>
             </div>
         </>
