@@ -65,7 +65,7 @@ export const CreateRapt = () => {
             <div className="flex items-center w-full flex-col p-4 max-h-full">
 
                 <div className="w-3/4 h-16 text-3xl font-bold mb-4">
-                    <input onChange={(e) => { setTitle(e.target.value) }}
+                    <input autoFocus={true} onChange={(e) => { setTitle(e.target.value) }}
                         className="h-full w-full outline-none placeholder-gray-500"
                         type="text"
                         placeholder="Enter your title here"
@@ -100,6 +100,7 @@ export const CreateRapt = () => {
                                 }
                             ),
                         ]}
+                        preview="live"
                         height={400}
                         enableScroll={false}
                         previewOptions={{

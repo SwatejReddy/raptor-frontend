@@ -1,6 +1,8 @@
 import { rapt } from "@/types/rapt";
+import Markdown from "react-markdown";
 import { Link, useNavigate } from "react-router-dom"
 import { RecoilValue, useRecoilValue } from "recoil"
+import { H1 } from "./ui/typography";
 
 interface BlogProps {
     id: string;
@@ -35,7 +37,7 @@ export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
                 </time>
             </div>
 
-            <div className="hidden sm:block sm:basis-56">
+            <div className="hidden sm:block sm:basis-56 w-2/3">
                 <img
                     alt=""
                     src="https://images.unsplash.com/photo-1609557927087-f9cf8e88de18?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
@@ -43,7 +45,7 @@ export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
                 />
             </div>
 
-            <div className="flex flex-1 flex-col justify-between">
+            <div className="flex flex-1 flex-col justify-between w-2/4">
                 <div className="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
                     <a href="#">
                         <h3 className="font-bold uppercase text-gray-900">
@@ -57,10 +59,11 @@ export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
                         </div>
                         <p onClick={() => { navigate(`/profile/${rapt.userId}`) }} className="ml-3 text-xs text-muted-foreground cursor-pointer">{rapt.user.name}</p>
                     </div>
-
-                    <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">
-                        {displayContent}
-                    </p>
+                    <div className="">
+                        <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">
+                            <Markdown>{displayContent}</Markdown>
+                        </p>
+                    </div>
                 </div>
 
                 <div className="sm:flex sm:items-end sm:justify-end">
@@ -72,6 +75,7 @@ export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
                     </Link>
                 </div>
             </div>
+
         </article>
     )
 }
