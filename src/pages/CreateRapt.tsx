@@ -58,6 +58,24 @@ export const CreateRapt = () => {
 
     }
 
+    async function autoGenerateTitle() {
+        try {
+            // Implement rate limiting in future and take userId from token in BE.
+            const res = await axios.post(`${BASE_URL}/ai/generate-title`, {
+                content
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${localStorage.getItem('token')}`
+                }
+            })
+            console.log(res);
+            setTitle(res.data.title);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     return (
         <>
@@ -129,6 +147,7 @@ export const CreateRapt = () => {
                                 <Button onClick={submitRapt} variant="default">Post</Button>
                             )
                     }
+                    <Button onClick={autoGenerateTitle} className="ml-5" variant="outline">Generate Title (AI)</Button>
                 </div>
                 <AlertDialog open={showAlert}>
                     <AlertDialogContent className="flex flex-col items-center justify-center max-w-[300px] p-4">
