@@ -9,6 +9,18 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { ReloadIcon } from '@radix-ui/react-icons';
+
 
 interface Rapt {
     id: number;
@@ -42,6 +54,8 @@ export const Rapt: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [viewerIsAuthor, setViewerIsAuthor] = useState(false);
+    const [deleteAlertStatus, setDeleteAlertStatus] = useState(false);
+    const [raptDeleteInProgress, setRaptDeleteInProgress] = useState(false);
 
 
     const navigate = useNavigate();
@@ -68,7 +82,7 @@ export const Rapt: React.FC = () => {
         const checkIfViewerIsAuthor = async () => {
             if (!rapt?.userId) return;
             try {
-                const res = await axios.post(`http://127.0.0.1:8787/api/v1/user/profile/me`, {
+                const res = await axios.post(`${BASE_URL}/user/profile/me`, {
                     requestedProfileId: rapt.userId,
                 }, {
                     headers: {
@@ -79,10 +93,8 @@ export const Rapt: React.FC = () => {
 
                 if (res.data.isCurrentUserProfile) {
                     setViewerIsAuthor(true);
-                    console.log("Viewer is author:", true);  // Logs after setting state
                 } else {
                     setViewerIsAuthor(false);
-                    console.log("Viewer is author:", false);  // Logs after setting state
                 }
             } catch (err) {
                 console.error("Error checking if viewer is author:", err);
@@ -94,6 +106,28 @@ export const Rapt: React.FC = () => {
         }
     }, [rapt]);
 
+    function handleRaptEdit() {
+        navigate(`/edit-rapt/${id}`, { state: { rapt } });
+    }
+
+    async function handleRaptDelete() {
+        console.log("Deleting rapt with id:", id);
+        if (!rapt) return;
+        setRaptDeleteInProgress(true);
+        const res = await axios.delete(`${BASE_URL}/rapt/delete/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token"),
+            },
+        }).then(() => {
+            navigate('/home');
+        }).catch((err) => {
+            console.error("Error deleting rapt:", err);
+            setError("Failed to delete rapt. Please try again.");
+        });
+        console.log(res);
+        setRaptDeleteInProgress(false);
+    }
 
     if (loading) return <><Navbar /><div>
         <Loader />
@@ -124,11 +158,11 @@ export const Rapt: React.FC = () => {
                 {viewerIsAuthor && (
                     <div className='mb-3'>
                         <div className="flex justify-start space-x-2 mt-4 mb-4">
-                            <Button variant="outline" className="w-8 h-8 group" size="icon" >
+                            <Button variant="outline" className="w-8 h-8 group" size="icon" onClick={handleRaptEdit} >
                                 <Pencil className="h-3 w-3 group-hover:h-4 group-hover:w-4 transition-all duration-100" />
                                 <span className="sr-only">Edit</span>
                             </Button>
-                            <Button variant="outline" className="w-8 h-8 group" size="icon" >
+                            <Button variant="outline" className="w-8 h-8 group" size="icon" onClick={() => { setDeleteAlertStatus(true) }}>
                                 <Trash2 className="h-3 w-3 group-hover:h-4 group-hover:w-4 transition-all duration-100 " />
                                 <span className="sr-only">Delete</span>
                             </Button>
@@ -136,10 +170,36 @@ export const Rapt: React.FC = () => {
                         <Separator />
                     </div>
                 )}
+
                 <div>
                     <Markdown className="prose prose-l">{rapt.content}</Markdown>
 
                 </div>
+            </div>
+            <div>
+                <AlertDialog open={deleteAlertStatus}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader className="text-left">
+                            <AlertDialogTitle className="text-left">Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your
+                                account and remove your data from our servers.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel onClick={() => { setDeleteAlertStatus(false) }}>Cancel</AlertDialogCancel>
+                            {
+                                raptDeleteInProgress ?
+                                    <Button disabled>
+                                        <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                                        Deleting
+                                    </Button>
+                                    :
+                                    <AlertDialogAction onClick={handleRaptDelete}>Delete</AlertDialogAction>
+                            }
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </>
     );
