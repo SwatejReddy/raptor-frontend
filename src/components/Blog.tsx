@@ -2,7 +2,6 @@ import { rapt } from "@/types/rapt";
 import Markdown from "react-markdown";
 import { Link, useNavigate } from "react-router-dom"
 import { RecoilValue, useRecoilValue } from "recoil"
-import { H1 } from "./ui/typography";
 
 interface BlogProps {
     id: string;
