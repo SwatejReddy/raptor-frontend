@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import axios from "axios"
 import { BASE_URL } from "@/config"
@@ -22,18 +22,16 @@ import {
 export const EditRapt = () => {
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const [showContentLengthAlert, setShowContentLengthAlert] = useState(false);
+    const [titleGenerationLoading, setTitleGenerationLoading] = useState(false);
+
+
     const params = useParams<{ id: string }>()
     const raptId = params.id;
     const location = useLocation();
-    console.log("this is the location.state", location.state);
     const [title, setTitle] = useState(location.state.rapt.title)
     const [content, setContent] = useState(location.state.rapt.content)
-    console.log("raptId", raptId);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log("content: ", content);
-    }, [content])
 
     async function submitRapt() {
         if (title.trim() === '' || content.trim() === '') {
@@ -44,7 +42,7 @@ export const EditRapt = () => {
 
         try {
             setLoading(true);
-            const res = await axios.post(`${BASE_URL}/rapt/edit/${raptId}`, {
+            await axios.post(`${BASE_URL}/rapt/edit/${raptId}`, {
                 title,
                 content,
             }, {
@@ -53,7 +51,6 @@ export const EditRapt = () => {
                     "Authorization": `${localStorage.getItem('token')}`
                 }
             })
-            console.log(res);
         } catch (e) {
             console.log(e);
         } finally {
@@ -61,6 +58,29 @@ export const EditRapt = () => {
             navigate(`/rapt/${raptId}`);
         }
 
+    }
+
+    async function autoGenerateTitle() {
+        const contentWordCount = content.split(' ').length;
+        if (contentWordCount < 10) {
+            setShowContentLengthAlert(true);
+        }
+        try {
+            setTitleGenerationLoading(true);
+            // Implement rate limiting in future and take userId from token in BE.
+            const res = await axios.post(`${BASE_URL}/ai/get-title`, {
+                content
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${localStorage.getItem('token')}`
+                }
+            })
+            setTitle(res.data.groqData.choices[0].message.content);
+            setTitleGenerationLoading(false);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -120,19 +140,31 @@ export const EditRapt = () => {
                     />
                 </div>
 
-                <div className="content-start w-3/4">
-                    {
-                        loading ?
-                            (
-                                <Button disabled>
-                                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                                    Posting
-                                </Button>
-                            ) :
-                            (
-                                <Button onClick={submitRapt} variant="default">Edit</Button>
-                            )
-                    }
+                <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:w-3/4 mx-auto space-y-4 sm:space-y-0 sm:space-x-4 lg:justify-start">
+                    <div className="w-full sm:w-1/2 max-w-[200px]">
+                        {loading ? (
+                            <Button className="w-full" disabled>
+                                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                                Posting
+                            </Button>
+                        ) : (
+                            <Button className="w-full" onClick={submitRapt} variant="default">
+                                Edit
+                            </Button>
+                        )}
+                    </div>
+                    <div className="w-full sm:w-1/2 max-w-[200px]">
+                        {titleGenerationLoading ? (
+                            <Button disabled className="w-full" variant="outline">
+                                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                                Generating
+                            </Button>
+                        ) : (
+                            <Button onClick={autoGenerateTitle} className="w-full" variant="outline">
+                                Generate Title (AI)
+                            </Button>
+                        )}
+                    </div>
                 </div>
                 <AlertDialog open={showAlert}>
                     <AlertDialogContent className="flex flex-col items-center justify-center max-w-[300px] p-4">
@@ -144,6 +176,23 @@ export const EditRapt = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter className="flex justify-center mt-4">
                             <AlertDialogAction onClick={() => setShowAlert(false)}>
+                                Okay
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                {/* display this alert when the user tries content is less than 10 words */}
+                <AlertDialog open={showContentLengthAlert}>
+                    <AlertDialogContent className="flex flex-col items-center justify-center max-w-[300px] p-4">
+                        <AlertDialogHeader className="text-center">
+                            <AlertDialogTitle className="text-lg font-semibold mb-2">Invalid Content Length</AlertDialogTitle>
+                            <AlertDialogDescription className="text-sm text-muted-foreground">
+                                Content should be at least of 10 words to generate a title.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="flex justify-center mt-4">
+                            <AlertDialogAction onClick={() => setShowContentLengthAlert(false)}>
                                 Okay
                             </AlertDialogAction>
                         </AlertDialogFooter>
