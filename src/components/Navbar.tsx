@@ -63,7 +63,7 @@ export const Navbar = () => {
                     <Button variant="ghost" size="icon">
                         <Bell size={20} />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button onClick={() => { navigate('/settings') }} variant="ghost" size="icon">
                         <Settings size={20} />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => { navigate(`/profile/${localStorage.getItem("id")}`) }}>
@@ -90,7 +90,7 @@ export const Navbar = () => {
                         <Button variant="ghost" className="w-full justify-start">
                             <Bell className="mr-2 h-4 w-4" /> Notifications
                         </Button>
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button onClick={() => { navigate('/settings') }} variant="ghost" className="w-full justify-start">
                             <Settings className="mr-2 h-4 w-4" /> Settings
                         </Button>
                         <Button variant="ghost" className="w-full justify-start" onClick={manageLogOut}>

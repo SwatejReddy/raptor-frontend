@@ -8,6 +8,7 @@ import { CreateRapt } from "./pages/CreateRapt"
 import { SearchedRapts } from "./components/SearchedRapts"
 import { ProfilePage } from "./pages/ProfilePage"
 import { EditRapt } from "./pages/EditRapt"
+import { Settings } from "./pages/Settings"
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/edit-rapt/:id" element={<EditRapt />} />
           <Route path="/search" element={<SearchedRapts />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </>
