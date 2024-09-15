@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,10 +8,65 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { User, Lock, Crown } from 'lucide-react'
 import { Navbar } from '@/components/Navbar'
+import axios from 'axios'
+import { BASE_URL } from '@/config'
+import { useNavigate } from 'react-router-dom'
 
 export function Settings() {
     const [activeTab, setActiveTab] = useState('profile')
     const [isPremium, setIsPremium] = useState(false)
+    const [profileInfo, setProfileInfo] = useState({ id: "", name: "", username: "", email: "", verified: false, bio: "" })
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        async function getProfileInfo() {
+            const res = await axios.get(`${BASE_URL}/info/profile`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            })
+            setProfileInfo(res.data.user)
+        }
+
+        getProfileInfo();
+    }, [])
+
+    useEffect(() => {
+        console.log(profileInfo)
+    }, [profileInfo])
+
+    async function editProfileInfo() {
+        console.log("Editing profile info...")
+        try {
+            var res = await axios.post(`${BASE_URL}/user/editProfile`, {
+                name: profileInfo.name,
+                username: profileInfo.username,
+                email: profileInfo.email,
+                bio: profileInfo.bio
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            })
+            if (res.status == 200) {
+                alert("Profile updated successfully!")
+                navigate(`/profile/${localStorage.getItem("id")}`)
+            }
+            if (res.status == 411) {
+                alert("Please fill all the fields")
+            }
+            if (res.status == 409) {
+                alert("Username or email is already taken")
+            }
+        } catch (error) {
+            console.error(error)
+            alert("An error occurred. Please try again.")
+        }
+    }
+
 
     const renderContent = () => {
         switch (activeTab) {
@@ -25,19 +80,23 @@ export function Settings() {
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Name</Label>
-                                <Input id="name" placeholder="John Doe" />
+                                <Input defaultValue={profileInfo.name} onChange={(e) => setProfileInfo(prev => ({ ...prev, name: e.target.value }))} id="name" placeholder="John Doe" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="username">Username</Label>
-                                <Input id="username" placeholder="johndoe" />
+                                <Input defaultValue={profileInfo.username} onChange={(e) => setProfileInfo(prev => ({ ...prev, username: e.target.value }))} id="username" placeholder="johndoe" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input defaultValue={profileInfo.email} onChange={(e) => setProfileInfo(prev => ({ ...prev, email: e.target.value }))} id="email" placeholder="johndoe" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="bio">Bio</Label>
-                                <Textarea id="bio" placeholder="Tell us about yourself" />
+                                <Textarea defaultValue={profileInfo.bio} onChange={(e) => setProfileInfo(prev => ({ ...prev, bio: e.target.value }))} id="bio" placeholder="Tell us about yourself" />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full sm:w-auto">Update Profile</Button>
+                            <Button onClick={editProfileInfo} className="w-full sm:w-auto">Update Profile</Button>
                         </CardFooter>
                     </Card>
                 )
