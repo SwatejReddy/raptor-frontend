@@ -6,7 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Loader } from '@/components/Animations/Loader';
 import Markdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Heart, Pencil, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 import {
@@ -36,15 +36,6 @@ interface Rapt {
     }
 }
 
-async function getRaptById(id: string) {
-    const res = await axios.get(`${BASE_URL}/rapt/view/${id}`, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
-        }
-    });
-    return res.data.rapt;
-}
 
 
 
@@ -56,6 +47,21 @@ export const Rapt: React.FC = () => {
     const [viewerIsAuthor, setViewerIsAuthor] = useState(false);
     const [deleteAlertStatus, setDeleteAlertStatus] = useState(false);
     const [raptDeleteInProgress, setRaptDeleteInProgress] = useState(false);
+    const [likes, setLikes] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
+    const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
+
+    async function getRaptById(id: string) {
+        const res = await axios.get(`${BASE_URL}/rapt/view/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            }
+        });
+        setLikes(res.data.rapt.likes);
+        setIsLiked(res.data.isAlreadyLiked);
+        return res.data.rapt;
+    }
 
 
     const navigate = useNavigate();
@@ -129,6 +135,58 @@ export const Rapt: React.FC = () => {
         setRaptDeleteInProgress(false);
     }
 
+    // async function handleLike() {
+    //     setLikes(likes + (isLiked ? -1 : 1));
+    //     setIsLiked(!isLiked);
+    //     const res = await axios.post(`${BASE_URL}/rapt/like/${id}`, {}, {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": localStorage.getItem("token"),
+    //         },
+    //     })
+    //     if (res.status === 200) {
+    //         setLikes(res.data.likesCount);
+    //         setIsLiked(res.data.raptLiked);
+    //     }
+    // }
+
+    // Implemented debouncing for like button to prevent rapid like clicking (UI optimistically updates)
+    async function handleLike() {
+        // Update UI optimistically
+        setLikes(likes + (isLiked ? -1 : 1));
+        setIsLiked(!isLiked);
+
+        // Clear any previous timeout if it exists
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout);
+        }
+
+        // Set a new debounce timeout
+        const newTimeout = setTimeout(async () => {
+            try {
+                const res = await axios.post(`${BASE_URL}/rapt/like/${id}`, {}, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token"),
+                    },
+                });
+                if (res.status === 200) {
+                    setLikes(res.data.likesCount);
+                    setIsLiked(res.data.raptLiked);
+                }
+            } catch (error) {
+                console.error("Error liking the rapt:", error);
+            }
+        }, 200);  // 0.5 second debounce delay
+
+        setDebounceTimeout(newTimeout);  // Store the timeout ID
+    }
+
+
+    useEffect(() => {
+        console.log("likes: ", likes);
+    }, [likes]);
+
     if (loading) return <><Navbar /><div>
         <Loader />
     </div></>;
@@ -143,13 +201,32 @@ export const Rapt: React.FC = () => {
                     <h1 className="scroll-m-20 font-extrabold tracking-tight text-6xl">{rapt.title}</h1>
                 </div>
                 <div className='mb-3'>
-                    <div onClick={() => { navigate(`/profile/${rapt.userId}`) }}
-                        className='mb-5 flex items-center cursor-pointer'>
-
-                        <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                            <svg className="absolute w-8 h-8 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
+                    <div className='mb-5 flex items-center justify-between'>
+                        <div
+                            onClick={() => { navigate(`/profile/${rapt.userId}`) }}
+                            className='flex items-center cursor-pointer'
+                        >
+                            <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                                <svg className="absolute w-8 h-8 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
+                            </div>
+                            <p className="text-sm text-muted-foreground ml-3">{rapt.user.name}</p>
                         </div>
-                        <p className="text-sm text-muted-foreground ml-3" >{rapt.user.name}</p>
+                        <div className="flex items-center space-x-1 cursor-pointer" onClick={handleLike}>
+                            <Heart
+                                className={`h-5 w-5 transition-transform duration-300 ease-in-out active:scale-150
+          ${isLiked ? 'text-red-500 fill-red-500' : 'text-gray-500'}`}
+                                aria-label={isLiked ? "Unlike" : "Like"}
+                            />
+                            <span className="text-sm text-muted-foreground">{likes}</span>
+                        </div>
+                        {/* <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center space-x-1"
+                        >
+                            <Heart className="h-4 w-4" />
+                            <span>69</span>
+                        </Button> */}
                     </div>
                     <Separator />
                 </div>
@@ -173,7 +250,6 @@ export const Rapt: React.FC = () => {
 
                 <div>
                     <Markdown className="prose prose-l">{rapt.content}</Markdown>
-
                 </div>
             </div>
             <div>

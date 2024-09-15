@@ -11,6 +11,7 @@ interface BlogProps {
 export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
 
     const rapt = useRecoilValue(raptSelector(id))
+    console.log(id)
 
     const navigate = useNavigate()
 
