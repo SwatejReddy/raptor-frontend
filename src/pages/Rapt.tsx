@@ -20,6 +20,10 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { Echo } from '@/components/Echo';
+import { NewEcho } from '@/components/ui/NewEcho';
+import { useRecoilValue } from 'recoil';
+import { triggerRippleDataFetchAtom } from '@/recoil/atoms/triggerAtoms';
 
 
 interface Rapt {
@@ -50,6 +54,8 @@ export const Rapt: React.FC = () => {
     const [likes, setLikes] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
     const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
+    const [ripples, setRipples] = useState([]);
+    const triggerRippleDataFetch = useRecoilValue(triggerRippleDataFetchAtom);
 
     async function getRaptById(id: string) {
         const res = await axios.get(`${BASE_URL}/rapt/view/${id}`, {
@@ -66,6 +72,22 @@ export const Rapt: React.FC = () => {
 
     const navigate = useNavigate();
 
+    async function fetchRipples() {
+        if (!id) return;
+        try {
+            const res = await axios.get(`${BASE_URL}/ripple/view/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token"),
+                },
+            });
+            setRipples(res.data.ripples);
+        } catch (err) {
+            console.error("Error fetching ripples:", err);
+        }
+    }
+
+
     useEffect(() => {
         const fetchRapt = async () => {
             if (!id) return;
@@ -81,8 +103,18 @@ export const Rapt: React.FC = () => {
             }
         };
 
+
         fetchRapt();
+        fetchRipples();
     }, [id]);
+
+    useEffect(() => {
+        console.log("ripps: ", ripples)
+    }, [ripples])
+
+    useEffect(() => {
+        fetchRipples();
+    }, [triggerRippleDataFetch])
 
     useEffect(() => {
         const checkIfViewerIsAuthor = async () => {
@@ -134,21 +166,6 @@ export const Rapt: React.FC = () => {
         console.log(res);
         setRaptDeleteInProgress(false);
     }
-
-    // async function handleLike() {
-    //     setLikes(likes + (isLiked ? -1 : 1));
-    //     setIsLiked(!isLiked);
-    //     const res = await axios.post(`${BASE_URL}/rapt/like/${id}`, {}, {
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": localStorage.getItem("token"),
-    //         },
-    //     })
-    //     if (res.status === 200) {
-    //         setLikes(res.data.likesCount);
-    //         setIsLiked(res.data.raptLiked);
-    //     }
-    // }
 
     // Implemented debouncing for like button to prevent rapid like clicking (UI optimistically updates)
     async function handleLike() {
@@ -219,14 +236,6 @@ export const Rapt: React.FC = () => {
                             />
                             <span className="text-sm text-muted-foreground">{likes}</span>
                         </div>
-                        {/* <Button
-                            variant="ghost"
-                            size="sm"
-                            className="flex items-center space-x-1"
-                        >
-                            <Heart className="h-4 w-4" />
-                            <span>69</span>
-                        </Button> */}
                     </div>
                     <Separator />
                 </div>
@@ -248,8 +257,17 @@ export const Rapt: React.FC = () => {
                     </div>
                 )}
 
+                <div className="mb-10">
+                    <Markdown className="prose prose-xl">{rapt.content}</Markdown>
+                </div>
+                <Separator />
                 <div>
-                    <Markdown className="prose prose-l">{rapt.content}</Markdown>
+                    <NewEcho raptId={rapt.id} name={rapt.user.name} />
+                </div>
+                <div>
+                    {ripples.map((ripple: any) => (
+                        <Echo key={ripple.id} ripple={ripple} />
+                    ))}
                 </div>
             </div>
             <div>
@@ -277,6 +295,7 @@ export const Rapt: React.FC = () => {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
+
         </>
     );
 };
