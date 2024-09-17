@@ -19,6 +19,7 @@ interface ProfileCardProps {
         username: string;
         email: string;
         verified: boolean;
+        bio: string;
     };
     followers: Array<{
         id: string;
@@ -120,7 +121,7 @@ export const ProfileCard = ({ userDetails, followers, following, onFollowersClic
 
                     <h2 className="text-2xl font-bold mb-1">{userDetails.name}</h2>
                     <p className="text-sm text-muted-foreground mb-4">@{userDetails.username}</p>
-                    <p className="text-center text-sm mb-6">{userDetails.name}</p>
+                    <p className="text-center text-sm mb-6">{userDetails.bio}</p>
                     <div className="flex gap-8 mb-6">
                         <Button variant="ghost" className="text-center" onClick={onFollowersClick} disabled={profileLoading}>
                             <div>

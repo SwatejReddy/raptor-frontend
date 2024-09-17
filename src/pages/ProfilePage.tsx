@@ -22,6 +22,7 @@ interface userDetails {
     username: string,
     email: string,
     verified: boolean,
+    bio: string,
 }
 
 interface followerDetails {
@@ -53,7 +54,7 @@ export const ProfilePage = () => {
     const [isFollowersOpen, setIsFollowersOpen] = useState(false)
     const [isFollowingOpen, setIsFollowingOpen] = useState(false)
 
-    const [userDetails, setUserDetails] = useState<userDetails>({ id: "", name: "", username: "", email: "", verified: false })
+    const [userDetails, setUserDetails] = useState<userDetails>({ id: "", name: "", username: "", email: "", verified: false, bio: "" })
 
     const [followers, setFollowers] = useState<followerDetails[]>([{ id: "", dateFollowed: "", followingId: "", userId: "", user: { id: "", name: "", username: "" } }])
 
@@ -142,6 +143,10 @@ export const ProfilePage = () => {
     useEffect(() => {
         console.log({ followers, following })
     }, [followers, following])
+
+    useEffect(() => {
+        console.log({ userDetails })
+    }, [userDetails])
 
     function onFollowersClick() {
         setIsFollowersOpen(true)
