@@ -1,14 +1,10 @@
-import { rapt } from "@/types/rapt";
 import Markdown from "react-markdown";
 import { Link, useNavigate } from "react-router-dom"
-import { RecoilValue, useRecoilValue } from "recoil"
+import { useRecoilValue } from "recoil"
 
-interface BlogProps {
-    id: string;
-    raptSelector: (id: string) => RecoilValue<rapt | undefined>;
-}
+import { BlogProps } from "@/types/props";
 
-export const Blog: React.FC<BlogProps> = ({ id, raptSelector }) => {
+export function Blog({ id, raptSelector }: BlogProps) {
 
     const rapt = useRecoilValue(raptSelector(id))
     console.log(id)

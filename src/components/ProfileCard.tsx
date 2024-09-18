@@ -10,47 +10,12 @@ import { BASE_URL } from "@/config";
 import { triggerProfileDataFetchAtom } from "@/recoil/atoms/triggerAtoms";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { profileLoadingAtom } from "@/recoil/atoms/loadingAtoms";
-// import { UserMinus } from "lucide-react"
 
-interface ProfileCardProps {
-    userDetails: {
-        id: string;
-        name: string;
-        username: string;
-        email: string;
-        verified: boolean;
-        bio: string;
-    };
-    followers: Array<{
-        id: string;
-        dateFollowed: string;
-        followingId: string; //this has the person being followed id.
-        userId: string; //this has the follower user id.
-        user: {
-            id: string;
-            name: string;
-            username: string;
-        }
-    }>;
-    following: {
-        id: string;
-        dateFollowed: string;
-        followingId: string; //this has the person being followed id.
-        userId: string; //this has the follower user id.
-        following: {
-            id: string;
-            name: string;
-            username: string;
-        }
-    }[];
-
-    onFollowersClick: () => void;
-    onFollowingClick: () => void;
-}
+import { ProfileCardProps } from "@/types/props";
 
 export const ProfileCard = ({ userDetails, followers, following, onFollowersClick, onFollowingClick }: ProfileCardProps) => {
     const isCurrentUser = useRecoilValue(isCurrentUserAtom);
-    const currentUserId = localStorage.getItem("id"); // Assume the current user ID is stored in localStorage.
+    const currentUserId = localStorage.getItem("id");
     const [isFollowing, setIsFollowing] = useState(false);
     const [triggerProfileDataFetch, setTriggerProfileDataFetch] = useRecoilState(triggerProfileDataFetchAtom);
 

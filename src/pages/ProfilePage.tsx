@@ -15,39 +15,7 @@ import { ProfileCard } from '@/components/ProfileCard'
 import { isCurrentUserAtom } from '@/recoil/atoms/userAtoms'
 import { triggerProfileDataFetchAtom } from '@/recoil/atoms/triggerAtoms'
 import { profileLoadingAtom } from '@/recoil/atoms/loadingAtoms'
-
-interface userDetails {
-    id: string,
-    name: string,
-    username: string,
-    email: string,
-    verified: boolean,
-    bio: string,
-}
-
-interface followerDetails {
-    id: string,
-    dateFollowed: string,
-    followingId: string, //this has the person being followed id.
-    userId: string, //this has the follower user id.
-    user: {
-        id: string,
-        name: string,
-        username: string,
-    }
-}
-
-interface followingDetails {
-    id: string,
-    dateFollowed: string,
-    followingId: string, //this has the person being followed id.
-    userId: string, //this has the follower user id.
-    following: {
-        id: string,
-        name: string,
-        username: string,
-    }
-}
+import { followingDetails, followerDetails, userDetails } from '@/types/types'
 
 export const ProfilePage = () => {
 
@@ -205,6 +173,7 @@ export const ProfilePage = () => {
                     </div>
                 </div>
             </div>
+            {/* To hide scrollbar in the rapt section */}
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
                     display: none;

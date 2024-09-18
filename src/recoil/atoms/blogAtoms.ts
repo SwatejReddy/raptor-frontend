@@ -1,27 +1,12 @@
 import { atom, selectorFamily } from "recoil";
+import { rapt } from "@/types/types";
 
-interface Rapt {
-    id: string;
-    userId: string;
-    title: string;
-    content: string;
-    likes: number;
-    bookmarks: number;
-    dateCreated: string;
-    dateUpdated: string;
-    user: {
-        name: string;
-        username: string;
-        id: string;
-    }
-}
-
-export const latestRaptsAtom = atom<Rapt[]>({
+export const latestRaptsAtom = atom<rapt[]>({
     key: "latestRaptsAtom",
     default: []
 });
 
-export const latestRaptByIdSelector = selectorFamily<Rapt | undefined, string>({
+export const latestRaptByIdSelector = selectorFamily<rapt | undefined, string>({
     key: "latestRaptByIdSelector",
     get: (id: string) => ({ get }) => {
         const rapts = get(latestRaptsAtom);
@@ -29,12 +14,12 @@ export const latestRaptByIdSelector = selectorFamily<Rapt | undefined, string>({
     }
 });
 
-export const userLatestRaptsAtom = atom<Rapt[]>({
+export const userLatestRaptsAtom = atom<rapt[]>({
     key: "userLatestRaptsAtom",
     default: []
 });
 
-export const userLatestRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+export const userLatestRaptsByIdSelector = selectorFamily<rapt | undefined, string>({
     key: "userLatestRaptsByIdSelector",
     get: (id: string) => ({ get }) => {
         const rapts = get(userLatestRaptsAtom);
@@ -42,12 +27,12 @@ export const userLatestRaptsByIdSelector = selectorFamily<Rapt | undefined, stri
     }
 });
 
-export const userLikedRaptsAtom = atom<Rapt[]>({
+export const userLikedRaptsAtom = atom<rapt[]>({
     key: "userLikedRaptsAtom",
     default: []
 });
 
-export const userLikedRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+export const userLikedRaptsByIdSelector = selectorFamily<rapt | undefined, string>({
     key: "userLikedRaptsByIdSelector",
     get: (id: string) => ({ get }) => {
         const rapts = get(userLikedRaptsAtom);
@@ -55,12 +40,12 @@ export const userLikedRaptsByIdSelector = selectorFamily<Rapt | undefined, strin
     }
 });
 
-export const searchedRaptsAtom = atom<Rapt[]>({
+export const searchedRaptsAtom = atom<rapt[]>({
     key: "searchedRaptsAtom",
     default: []
 });
 
-export const searchedRaptsByIdSelector = selectorFamily<Rapt | undefined, string>({
+export const searchedRaptsByIdSelector = selectorFamily<rapt | undefined, string>({
     key: "searchedRaptsByIdSelector",
     get: (id: string) => ({ get }) => {
         const rapts = get(searchedRaptsAtom);

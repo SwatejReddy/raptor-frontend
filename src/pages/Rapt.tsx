@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "@/config";
 import axios from "axios";
@@ -43,7 +43,8 @@ interface Rapt {
 
 
 
-export const Rapt: React.FC = () => {
+// export const Rapt: React.FC = () => {
+export function Rapt() {
     const { id } = useParams<{ id: string }>();
     const [rapt, setRapt] = useState<Rapt | null>(null);
     const [loading, setLoading] = useState(true);

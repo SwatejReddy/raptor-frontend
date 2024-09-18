@@ -4,7 +4,6 @@ import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useEffect } from "react";
 import { Blog } from "./Blog";
-// import { rapt } from "@/types/rapt";
 import { useRecoilState } from "recoil";
 import { searchedRaptsAtom, searchedRaptsByIdSelector } from "@/recoil/atoms/blogAtoms";
 
@@ -12,7 +11,6 @@ import { searchedRaptsAtom, searchedRaptsByIdSelector } from "@/recoil/atoms/blo
 
 export const SearchedRapts = () => {
     const [searchParams] = useSearchParams();
-    // const [searchResults, setSearchResults] = useState<rapt[]>([]);
     const [searchResults, setSearchResults] = useRecoilState(searchedRaptsAtom);
     const query = searchParams.get('query');
 
